@@ -89,12 +89,49 @@ tibble(Film = chr_names,
 
 ##2 Use the sw_species list to (a) identify species that have known hair colors and (b) identify what those hair colors are.
 ```{r}
+#a
+
+str(sw_species)
+hc <- map_chr(sw_species, "hair_colors")
+str(hc)
+species <- map_chr(sw_species, "name")
+str(species)
+
+
+tbl2 <- tibble(Species = species,
+               `Hair Colors` = hc) %>% 
+  filter(`Hair Colors` != "n/a" &
+          `Hair Colors` != "none" & 
+          `Hair Colors` != "unknown")
+
+tbl2
 
 ```
 
 #PART C: Some "basic" API calls
 ```{r}
 
+library(httr)
+ability1 <- GET("https://pokeapi.co/api/v2/ability/1") %>%
+    content("parsed") 
 
+str(ability1)
+length(ability1$pokemon)
+
+```
+
+```{r}
+
+abilities <- paste0("https://pokeapi.co/api/v2/ability/", 1:5)
+abs <- map(abilities, ~GET(.x) %>% 
+                content("parsed"))
+
+str(abs)
+abs$pokemon
+
+names <- map_chr(abs$pokemon, "name")
+names
+
+tbl3 <- tibble(Pokemon = )
 ```
 
