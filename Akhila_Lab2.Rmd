@@ -7,7 +7,9 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
+
 #PART A
 
 ##Run the code below to load the following data set.
@@ -34,11 +36,32 @@ benchmarks <- benchmarks %>%
 
 ##1. Fit a model of the form lm(math ~ wave) for each student.
 ```{r}
+stu_split <- split(benchmarks, benchmarks$sid)
+str(stu_split)
+
+
+mods <- map(stu_split, ~lm(math ~ wave, data = .x))
+str(mods)
 
 ```
 
 ##2. Plot the distribution of slopes. Annotate the plot with a vertical line for the mean.
 ```{r}
+
+#coef extracts coefficients for any model
+coefs <- map(mods, ~coef(.x))
+#OR map(mods, coef)
+
+slopes <- map_dbl(coefs, ("wave"))
+str(slopes)
+
+relation <- tibble(student = names(slopes),
+                   slope = slopes)
+
+ggplot(relation, aes(slope)) +
+  geom_histogram(fill = "forestgreen",
+                 color = "white") +
+  geom_vline(aes(xintercept = mean(slope, na.rm = TRUE)))
 
 ```
 
@@ -46,12 +69,21 @@ benchmarks <- benchmarks %>%
 
 ##Install and load the {repurrrsive} package
 ```{r}
+
 install.packages("repurrrsive")
 library(repurrrsive)
 ```
 
 ##1. Use the sw_films list to identify how many characters were represented in each film
 ```{r}
+
+length(sw_films)
+
+chr_count <- map_dbl(sw_films, ~length(.x$characters))
+chr_names <- map_chr(sw_films, "title")
+
+tibble(Film = chr_names,
+              Characters = chr_count)
 
 ```
 
