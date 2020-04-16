@@ -169,4 +169,13 @@ tbl3 <- tibble(Ability = ability_type,
 tbl3
 ```
 
+##Bonus: Up to 1 point extra credit
+Create a new data frame that lists the names of the pokemon with these specific abilities.
+Hint: Try to get the name for one pokemon first, then extend out the logic to get all pokemon names. Also, this is really freaking hard so don’t spend too much time on it and don’t worry if you can’t figure it out.
+
+```{r}
+
+
+```
+
 
