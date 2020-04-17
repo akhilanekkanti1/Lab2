@@ -159,7 +159,7 @@ Use the parsed data to create a data frame that has the given ability, and the n
 ability <- map_chr(abs, "name")
 
 #extract length for 1 list
-length(abs[[1]]$names)
+length(abs[[1]]$pokemon)
 
 #convert into map 
 count <- map(abs, list("pokemon")) %>% 
@@ -168,7 +168,6 @@ count <- map(abs, list("pokemon")) %>%
 #create tibble 
 tibble(Ability = str_to_title(ability), 
               `Number of Pokemon` = count)
-
 ```
 
 
@@ -181,6 +180,15 @@ abs[[1]]$pokemon[[2]]$pokemon$name
 
 abs[[1]][["pokemon"]][[1]][["pokemon"]][["name"]]
 abs[[1]][["pokemon"]][[2]][["pokemon"]][["name"]]
+
+#individual level 
+pokemon1 <- by_pokemon[[1]][1]
+pokemon1[[1]]$pokemon$name
+pokemon1[[1]][["pokemon"]][["name"]]
+
+#extract pokemon list 
+by_pokemon <- map(abs, "pokemon")
+stench <- by_pokemon[1]
 
 ```
 
