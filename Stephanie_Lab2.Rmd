@@ -1,5 +1,5 @@
 ---
-title: "Stephanie_lab2"
+title: "Stephanie lab2"
 author: "Stephanie Gluck"
 date: "4/13/2020"
 output: html_document
@@ -156,15 +156,31 @@ Use the parsed data to create a data frame that has the given ability, and the n
 ```{r}
 #Use the parsed data to create a data frame that has the given ability, and the number of pokemon with that ability.
 
+ability <- map_chr(abs, "name")
 
+#extract length for 1 list
+length(abs[[1]]$names)
+
+#convert into map 
+count <- map(abs, list("pokemon")) %>% 
+  map_dbl(~length(.x))
+
+#create tibble 
+tibble(Ability = str_to_title(ability), 
+              `Number of Pokemon` = count)
 
 ```
-
 
 
 # Bonus: Up to 1 point extra credit
 Create a new data frame that lists the names of the pokemon with these specific abilities.
 ```{r bonus_poke_names}
+#extract name of 1 pokemon
+abs[[1]]$pokemon[[1]]$pokemon$name
+abs[[1]]$pokemon[[2]]$pokemon$name
+
+abs[[1]][["pokemon"]][[1]][["pokemon"]][["name"]]
+abs[[1]][["pokemon"]][[2]][["pokemon"]][["name"]]
 
 ```
 
