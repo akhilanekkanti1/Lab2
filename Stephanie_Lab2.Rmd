@@ -1,7 +1,7 @@
 ---
-title: "Stephanie lab2"
+title: "Stephanie Lab2"
 author: "Stephanie Gluck"
-date: "4/13/2020"
+date: "4/18/2020"
 output: html_document
 ---
 
@@ -39,7 +39,9 @@ benchmarks
 stu_split <- split(benchmarks, benchmarks$sid)
 
 mods <- map(stu_split, ~lm(math ~ wave, data = .x))
-mods
+
+#print the first 3 model
+mods[1:3]
 
 ```
 
@@ -69,7 +71,7 @@ ggplot(relation, aes(slope)) +
 ## Use the sw_films list to identify how many characters were represented in each film.
 ```{r number_characters}
 
-head(sw_films)
+#sw_films
 length(sw_films)
 
 #for only the first film
@@ -92,7 +94,7 @@ tibble(Film = chr_names,
 ## Use the sw_species list to (a) identify species that have known hair colors and (b) identify what those hair colors are.
 ```{r species_hair_colors}
 
-str(sw_species)
+#str(sw_species)
 
 hc <- map_chr(sw_species, "hair_colors")
 hc
@@ -121,8 +123,7 @@ ability1 <- GET("https://pokeapi.co/api/v2/ability/1") %>%
     content("parsed") 
 
 attributes(ability1)
-str(ability1)
-
+#str(ability1)
 
 #name of the ability 
 ability1$name
@@ -137,14 +138,14 @@ Use {purrr} to write an API call to obtain data on the first five abilities (not
 
 ### API call for first five abilities 
 
-```{r, eval = FALSE}
+```{r}
 abilities <- paste0("https://pokeapi.co/api/v2/ability/", 1:5)
 abilities
 
 abs <- map(abilities, ~GET(.x) %>% 
       content("parsed"))
 
-abs
+#abs
 
 ```
 
@@ -154,8 +155,6 @@ abs
 Use the parsed data to create a data frame that has the given ability, and the number of pokemon with that ability.
 
 ```{r}
-#Use the parsed data to create a data frame that has the given ability, and the number of pokemon with that ability.
-
 ability <- map_chr(abs, "name")
 
 #extract length for 1 list
@@ -165,6 +164,9 @@ length(abs[[1]]$pokemon)
 count <- map(abs, list("pokemon")) %>% 
   map_dbl(~length(.x))
 
+#another way to coutn # of pokemon with each ability: 
+map_dbl(abs, ~length(.x$pokemon))
+
 #create tibble 
 tibble(Ability = str_to_title(ability), 
               `Number of Pokemon` = count)
@@ -173,23 +175,25 @@ tibble(Ability = str_to_title(ability),
 
 # Bonus: Up to 1 point extra credit
 Create a new data frame that lists the names of the pokemon with these specific abilities.
+
+**Stephanie comment**: my group and I attempted the bonus but I was not able to get the map function to work to loop through to extract all the names of the pokemon for each ability. The following is the code we came up with thus far. 
+
 ```{r bonus_poke_names}
-#extract name of 1 pokemon
+#extract name of 1 pokemon from original list of 5 abilities 
 abs[[1]]$pokemon[[1]]$pokemon$name
 abs[[1]]$pokemon[[2]]$pokemon$name
 
+#another way to extract name of 1 pokemon 
 abs[[1]][["pokemon"]][[1]][["pokemon"]][["name"]]
 abs[[1]][["pokemon"]][[2]][["pokemon"]][["name"]]
 
-#individual level 
+#extract 1 pokemon list and 1 ability 
+by_pokemon <- map(abs, "pokemon")
+stench <- by_pokemon[1]
+
+#extract individual level 
 pokemon1 <- by_pokemon[[1]][1]
 pokemon1[[1]]$pokemon$name
 pokemon1[[1]][["pokemon"]][["name"]]
 
-#extract pokemon list 
-by_pokemon <- map(abs, "pokemon")
-stench <- by_pokemon[1]
-
 ```
-
-Hint: Try to get the name for one pokemon first, then extend out the logic to get all pokemon names. Also, this is really freaking hard so don’t spend too much time on it and don’t worry if you can’t figure it out.
